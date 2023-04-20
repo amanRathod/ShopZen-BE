@@ -1,14 +1,14 @@
 // enable the "uuid-ossp" extension to use the uuid_generate_v4() function to generate UUID values
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 // Product Category table
-CREATE TABLE IF NOT EXISTS product_category (
+-- CREATE TABLE IF NOT EXISTS product_category (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   category_name VARCHAR(255)
 );
 
 // Product table
-CREATE TABLE IF NOT EXISTS product (
+-- CREATE TABLE IF NOT EXISTS product (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   sku VARCHAR(255),
   name VARCHAR(255),
@@ -23,12 +23,29 @@ CREATE TABLE IF NOT EXISTS product (
 );
 
 // insert data into Product Category table
-INSERT INTO product_category(category_name) VALUES ('BOOKS');
+-- INSERT INTO product_category(category_name) VALUES ('BOOKS');
 
 // insert data into Product table
-INSERT INTO product (sku, name, description, image_url, active, units_in_stock,
+-- INSERT INTO product (sku, name, description, image_url, active, units_in_stock,
 unit_price, category_id, date_created)
 VALUES ('BOOK-TECH-1004', 'The Go Programming Language: A to Z', 'Learn Go',
 'assets/images/products/placeholder.png'
 ,TRUE,100,24.99,'7d02d06c-eb47-461b-833b-40067a151a14', NOW());
+
+// create category as enum type
+-- CREATE TYPE category AS ENUM ('BOOKS', 'ELECTRONICS', 'CLOTHING', 'HOME_APPLIANCES');
+
+-- if PostgreSQL database is not able to automatically convert the values in the category_name column to the Category enum type then,
+
+-- 1. Add a new temporary column to the product_category table with the Category enum type:
+-- ALTER TABLE product_category ADD COLUMN category_temp Category;
+
+-- 2. Update the category_temp column with the values from the category_name column
+-- UPDATE product_category SET category_temp = category_name::Category;
+
+-- 3.Drop the category_name column
+-- ALTER TABLE product_category DROP COLUMN category_name;
+
+-- 4.Rename the category_temp column to category
+-- ALTER TABLE product_category RENAME COLUMN category_temp TO category_name;
 
