@@ -1,5 +1,7 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.models.orderItem;
 
+import com.ecommerce.ShopZenbe.models.order.Order;
+import com.ecommerce.ShopZenbe.models.product.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 

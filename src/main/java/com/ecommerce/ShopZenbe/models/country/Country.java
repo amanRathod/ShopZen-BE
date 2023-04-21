@@ -1,5 +1,6 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.models.country;
 
+import com.ecommerce.ShopZenbe.models.state.State;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;

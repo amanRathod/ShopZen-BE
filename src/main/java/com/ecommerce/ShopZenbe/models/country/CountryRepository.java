@@ -1,6 +1,5 @@
-package com.ecommerce.ShopZenbe.dao;
+package com.ecommerce.ShopZenbe.models.country;
 
-import com.ecommerce.ShopZenbe.entity.Country;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 

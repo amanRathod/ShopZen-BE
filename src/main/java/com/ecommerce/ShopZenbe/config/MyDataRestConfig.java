@@ -1,7 +1,7 @@
 package com.ecommerce.ShopZenbe.config;
 
-import com.ecommerce.ShopZenbe.entity.Product;
-import com.ecommerce.ShopZenbe.entity.ProductCategory;
+import com.ecommerce.ShopZenbe.models.product.Product;
+import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;

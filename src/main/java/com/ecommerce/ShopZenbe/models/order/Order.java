@@ -1,6 +1,9 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.models.order;
 
-import com.ecommerce.ShopZenbe.entity.enums.OrderStatus;
+import com.ecommerce.ShopZenbe.models.address.Address;
+import com.ecommerce.ShopZenbe.models.customer.Customer;
+import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
+import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

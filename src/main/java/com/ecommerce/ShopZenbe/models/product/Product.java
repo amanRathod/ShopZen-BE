@@ -1,5 +1,6 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.models.product;
 
+import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

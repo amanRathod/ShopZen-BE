@@ -1,4 +1,4 @@
-package com.ecommerce.ShopZenbe.entity.enums;
+package com.ecommerce.ShopZenbe.common.enums;
 
 public enum OrderStatus {
     CREATED,

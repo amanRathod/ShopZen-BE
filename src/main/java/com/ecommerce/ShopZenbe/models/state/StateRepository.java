@@ -1,6 +1,5 @@
-package com.ecommerce.ShopZenbe.dao;
+package com.ecommerce.ShopZenbe.models.state;
 
-import com.ecommerce.ShopZenbe.entity.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;

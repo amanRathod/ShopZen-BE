@@ -1,6 +1,7 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.models.productCategory;
 
-import com.ecommerce.ShopZenbe.entity.enums.Category;
+import com.ecommerce.ShopZenbe.common.enums.Category;
+import com.ecommerce.ShopZenbe.models.product.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 

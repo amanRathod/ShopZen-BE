@@ -1,6 +1,5 @@
-package com.ecommerce.ShopZenbe.dao;
+package com.ecommerce.ShopZenbe.models.address;
 
-import com.ecommerce.ShopZenbe.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
