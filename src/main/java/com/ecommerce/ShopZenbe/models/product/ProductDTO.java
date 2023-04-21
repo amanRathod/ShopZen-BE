@@ -42,4 +42,5 @@ public class ProductDTO {
 
     @NotNull(message = "Product Category is required")
     private UUID categoryID;
+//    private ProductCategoryDto category;
 }

@@ -30,7 +30,9 @@ public class OrderItemDTO {
 
     @NotNull(message = "Order is mandatory")
     private UUID orderId;
+//    private OrderDTO order;
 
     @NotNull(message = "product is mandatory")
     private UUID productId;
+//    private ProductDTO product;
 }

@@ -31,14 +31,19 @@ public class OrderDTO {
     @Min(value = 1, message = "Total quantity must be at least 1")
     private Integer totalQuantity;
 
+//    private Set<OrderItemDTO> orderItems;
+
     @NotNull(message = "Billing address is mandatory")
     private UUID billingAddressId;
+//    private AddressDTO billingAddress;
 
     @NotNull(message = "Customer is mandatory")
     private UUID customerId;
+//    private CustomerDTO customer;
 
     @NotNull(message = "Shipping address is mandatory")
     private UUID shippingAddressId;
+//    private AddressDTO shippingAddress;
 
     @NotNull(message = "Order status is mandatory")
     @Enumerated(EnumType.STRING)
