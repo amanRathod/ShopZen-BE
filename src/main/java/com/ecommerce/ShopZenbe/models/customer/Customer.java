@@ -2,6 +2,7 @@ package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
 @Entity
 @Table(name="customer")
 @Getter
