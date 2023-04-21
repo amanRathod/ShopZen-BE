@@ -3,6 +3,8 @@ package com.ecommerce.ShopZenbe.models.product;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,7 +14,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name="product")
-@Data
+@Getter
+@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

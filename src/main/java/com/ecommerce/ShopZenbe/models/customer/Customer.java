@@ -3,6 +3,8 @@ package com.ecommerce.ShopZenbe.models.customer;
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -10,7 +12,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name="customer")
-@Data
+@Getter
+@Setter
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -4,13 +4,16 @@ import com.ecommerce.ShopZenbe.models.order.Order;
 import com.ecommerce.ShopZenbe.models.product.Product;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 @Table(name="order_item")
-@Data
+@Getter
+@Setter
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

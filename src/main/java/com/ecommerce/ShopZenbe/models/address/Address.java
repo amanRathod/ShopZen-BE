@@ -3,12 +3,15 @@ package com.ecommerce.ShopZenbe.models.address;
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "address")
-@Data
+@Getter
+@Setter
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

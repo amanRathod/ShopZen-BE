@@ -4,13 +4,16 @@ import com.ecommerce.ShopZenbe.common.enums.Category;
 import com.ecommerce.ShopZenbe.models.product.Product;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name="product_category")
-@Data
+@Getter
+@Setter
 public class ProductCategory {
     @Id
     @GeneratedValue
