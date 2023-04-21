@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDTO {
+//    private UUID id;
     @NotBlank(message = "City is mandatory")
     private String city;
 
