@@ -1,9 +1,9 @@
 package com.ecommerce.ShopZenbe.entity;
 
+import com.ecommerce.ShopZenbe.entity.enums.Category;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 

@@ -3,9 +3,13 @@ package com.ecommerce.ShopZenbe.entity;
 import com.ecommerce.ShopZenbe.entity.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +29,10 @@ public class Order {
     @Column(name = "total_quantity")
     private Integer totalQuantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    private Set<OrderItem> orderItems = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id", unique = true)
     private Address billingAddress;
 
@@ -33,7 +40,7 @@ public class Order {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "shipping_address_id", referencedColumnName = "id", unique = true)
     private Address shippingAddress;
 
@@ -42,8 +49,21 @@ public class Order {
     private OrderStatus status;
 
     @Column(name = "date_created")
+    @CreationTimestamp
     private Timestamp dateCreated;
 
     @Column(name = "last_updated")
+    @UpdateTimestamp
     private Timestamp lastUpdated;
+
+    public void add(OrderItem item) {
+        if (item != null) {
+            if (orderItems == null) {
+                orderItems = new HashSet<>();
+            }
+
+            orderItems.add(item);
+            item.setOrder(this);
+        }
+    }
 }

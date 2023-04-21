@@ -3,6 +3,7 @@ package com.ecommerce.ShopZenbe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,4 +29,8 @@ public class Address {
 
     @Column(name = "zip_code")
     private String zipCode;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Order order;
 }

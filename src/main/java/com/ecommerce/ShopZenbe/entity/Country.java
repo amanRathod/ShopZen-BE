@@ -1,10 +1,10 @@
 package com.ecommerce.ShopZenbe.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "country")
@@ -19,4 +19,9 @@ public class Country {
 
     @Column(name = "name", length = 255)
     private String name;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "country")
+    @JsonIgnore
+    private List<State> states;
+
 }

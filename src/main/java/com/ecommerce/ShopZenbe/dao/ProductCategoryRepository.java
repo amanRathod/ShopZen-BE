@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.UUID;
 
-@CrossOrigin("http://localhost:3000")
 @RepositoryRestResource(collectionResourceRel = "productCategory", path = "product-category")
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, UUID> {
 }

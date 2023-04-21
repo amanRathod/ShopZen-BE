@@ -1,4 +1,4 @@
-package com.ecommerce.ShopZenbe.entity;
+package com.ecommerce.ShopZenbe.entity.enums;
 
 public enum Category {
     BOOKS,
