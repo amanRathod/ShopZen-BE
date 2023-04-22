@@ -47,8 +47,8 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> registerCustomer(
-            @Valid @RequestBody CustomerDTO request) {
-        CustomerResponseDTO customer = customerService.addCustomer(request);
+            @Valid @RequestBody CustomerDTO dto) {
+        CustomerResponseDTO customer = customerService.addCustomer(dto);
 
         ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -62,8 +62,8 @@ public class CustomerController {
     @PutMapping("{customerId}")
     public ResponseEntity<?> updateCustomer(
             @PathVariable("customerId") UUID customerId,
-            @Valid @RequestBody CustomerUpdateRequest updateRequest) {
-        CustomerResponseDTO customer = customerService.updateCustomer(customerId, updateRequest);
+            @Valid @RequestBody UpdateCustomerDTO dto) {
+        CustomerResponseDTO customer = customerService.updateCustomer(customerId, dto);
 
         ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
                 .statusCode(HttpStatus.OK.value())

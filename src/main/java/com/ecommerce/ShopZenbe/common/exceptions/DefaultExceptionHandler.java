@@ -15,21 +15,21 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class DefaultExceptionHandler {
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleException(ResourceNotFoundException e,
+    @ExceptionHandler({ResourceNotFoundException.class, DuplicateResourceException.class})
+    public ResponseEntity<ApiError> handleExceptions(Exception e,
                                                     HttpServletRequest request) {
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
                 e.getMessage(),
-                "",
-                HttpStatus.NOT_FOUND.value(),
+                e.getCause().getMessage(),
+                HttpStatus.FORBIDDEN.value(),
                 LocalDateTime.now()
         );
 
         return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler({DuplicateResourceException.class, RequestValidationException.class})
+    @ExceptionHandler(RequestValidationException.class)
     public ResponseEntity<ApiError> handleException(DuplicateResourceException e,
                                                     HttpServletRequest request) {
         ApiError apiError = new ApiError(

@@ -30,7 +30,8 @@ public class CustomerService {
 
     public CustomerResponseDTO getCustomer(UUID customerId) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("customer with id %s not found".formatted(customerId)));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Customer Not Found", new Throwable("Customer does not exist in the system!")));
 
         return modelMapper.map(customer, CustomerResponseDTO.class);
     }
@@ -39,7 +40,7 @@ public class CustomerService {
         String email = request.getEmail();
         if (customerRepository.existsByEmail(email)) {
             throw new DuplicateResourceException(
-                    "Email already taken!"
+                    "Email already taken!", new Throwable("Please try with another email!")
             );
         }
 
@@ -53,32 +54,32 @@ public class CustomerService {
         return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
-    public CustomerResponseDTO updateCustomer(UUID customerId, CustomerUpdateRequest updateRequest) {
+    public CustomerResponseDTO updateCustomer(UUID customerId, UpdateCustomerDTO dto) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "customer with id [%s] not found".formatted(customerId)
+                        "Customer Not Found", new Throwable("Customer does not exist in the system!")
                 ));
 
         boolean changes = false;
 
-        if (updateRequest.firstName() != null && !updateRequest.firstName().equals(customer.getFirstName())) {
-            customer.setFirstName(updateRequest.firstName());
+        if (dto.firstName() != null && !dto.firstName().equals(customer.getFirstName())) {
+            customer.setFirstName(dto.firstName());
             changes = true;
         }
 
-        if (updateRequest.lastName() != null && !updateRequest.lastName().equals(customer.getLastName())) {
-            customer.setLastName(updateRequest.lastName());
+        if (dto.lastName() != null && !dto.lastName().equals(customer.getLastName())) {
+            customer.setLastName(dto.lastName());
             changes = true;
         }
 
-        if (updateRequest.email() != null && !updateRequest.email().equals(customer.getEmail())) {
-            if(customerRepository.existsByEmail(updateRequest.email())) {
+        if (dto.email() != null && !dto.email().equals(customer.getEmail())) {
+            if(customerRepository.existsByEmail(dto.email())) {
                 throw new DuplicateResourceException(
-                        "Email already taken!"
+                        "Email already taken!", new Throwable("Please try with another email!")
                 );
             }
 
-            customer.setEmail(updateRequest.email());
+            customer.setEmail(dto.email());
             changes = true;
         }
 
