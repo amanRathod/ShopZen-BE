@@ -2,48 +2,58 @@ package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
 import com.ecommerce.ShopZenbe.common.exceptions.RequestValidationException;
+import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final ModelMapper modelMapper;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerResponseDTO> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
+        return customers.stream()
+                .map(customer -> modelMapper.map(customer, CustomerResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Customer> getCustomer(UUID customerId) {
-        return customerRepository.findById(customerId);
+    public CustomerResponseDTO getCustomer(UUID customerId) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("customer with id %s not found".formatted(customerId)));
+
+        return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
-    public void addCustomer(CustomerDTO request) {
+    public CustomerResponseDTO addCustomer(CustomerDTO request) {
         String email = request.getEmail();
         if (customerRepository.existsByEmail(email)) {
             throw new DuplicateResourceException(
-                    "email already taken"
+                    "Email already taken!"
             );
         }
 
-        Customer customer = Customer.builder()
+        Customer savedCustomer = Customer.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .build();
 
-        customerRepository.save(customer);
+        Customer customer = customerRepository.save(savedCustomer);
+        return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
-    public void updateCustomer(UUID customerId, CustomerUpdateRequest updateRequest) {
+    public CustomerResponseDTO updateCustomer(UUID customerId, CustomerUpdateRequest updateRequest) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "customer with id [%s] not found".formatted(customerId)
@@ -64,19 +74,20 @@ public class CustomerService {
         if (updateRequest.email() != null && !updateRequest.email().equals(customer.getEmail())) {
             if(customerRepository.existsByEmail(updateRequest.email())) {
                 throw new DuplicateResourceException(
-                        "email already taken"
+                        "Email already taken!"
                 );
             }
 
-            customer.setLastName(updateRequest.email());
+            customer.setEmail(updateRequest.email());
             changes = true;
         }
 
         if (!changes) {
-            throw new RequestValidationException("no data changes found");
+            throw new RequestValidationException("No data changes found!");
         }
 
         customerRepository.save(customer);
+        return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
     public void deleteCustomerById(UUID customerId) {

@@ -2,20 +2,18 @@ package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="customer")
-@Getter
-@Setter
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

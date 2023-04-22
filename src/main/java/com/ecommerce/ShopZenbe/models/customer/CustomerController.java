@@ -1,16 +1,16 @@
 package com.ecommerce.ShopZenbe.models.customer;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("api/v1/customer")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -19,46 +19,65 @@ public class CustomerController {
     }
 
     @GetMapping
-    public List<Customer> getCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getCustomers() {
+        List<CustomerResponseDTO> customer = (List<CustomerResponseDTO>) customerService.getAllCustomers();
+
+        ApiResponse<List<CustomerResponseDTO>> response = ApiResponse.<List<CustomerResponseDTO>>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("")
+                .data(customer)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable UUID id) {
-//        Optional<Customer> customerDB = customerService.getUser(id);
-//
-//        System.out.println("customer data here ========= " + customerDB.toString());
-//        if (customerDB.isEmpty()) {
-//            System.out.println("=-=--=-==--==");
-//            throw new EntityNotFoundException("Customer not found");
-//        }
-//
-//        return ResponseEntity.ok(customerDB);
-//    }
-
     @GetMapping("{customerId}")
-    public Optional<Customer> getCustomer(
+    public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomer(
             @PathVariable("customerId") UUID customerId) {
-        return customerService.getCustomer(customerId);
+        CustomerResponseDTO customer = customerService.getCustomer(customerId);
+
+        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("")
+                .data(customer)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping
-    public ResponseEntity<?> registerCustomer(
+    public ResponseEntity<ApiResponse<CustomerResponseDTO>> registerCustomer(
             @Valid @RequestBody CustomerDTO request) {
-        customerService.addCustomer(request);
-        return ResponseEntity.ok("Customer Added Successfully");
+        CustomerResponseDTO customer = customerService.addCustomer(request);
+
+        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("Customer created successfully!")
+                .data(customer)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("{customerId}")
-    public void updateCustomer(
+    public ResponseEntity<?> updateCustomer(
             @PathVariable("customerId") UUID customerId,
-            @RequestBody CustomerUpdateRequest updateRequest) {
-        customerService.updateCustomer(customerId, updateRequest);
+            @Valid @RequestBody CustomerUpdateRequest updateRequest) {
+        CustomerResponseDTO customer = customerService.updateCustomer(customerId, updateRequest);
+
+        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Customer updated successfully!")
+                .data(customer)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("{customerId}")
-    public void deleteCustomer(
+    public ResponseEntity<?> deleteCustomer(
             @PathVariable("customerId") UUID customerId) {
         customerService.deleteCustomerById(customerId);
+        return ResponseEntity.ok("Customer deleted successfully!");
     }
 }

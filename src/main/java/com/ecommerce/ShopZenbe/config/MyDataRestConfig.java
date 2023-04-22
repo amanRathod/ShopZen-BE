@@ -2,6 +2,8 @@ package com.ecommerce.ShopZenbe.config;
 
 import com.ecommerce.ShopZenbe.models.product.Product;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -10,6 +12,11 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
     @Override
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
 
