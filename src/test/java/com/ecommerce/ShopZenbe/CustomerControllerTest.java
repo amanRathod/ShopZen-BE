@@ -2,6 +2,9 @@ package com.ecommerce.ShopZenbe;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import com.ecommerce.ShopZenbe.models.customer.*;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;

@@ -1,6 +1,9 @@
 package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

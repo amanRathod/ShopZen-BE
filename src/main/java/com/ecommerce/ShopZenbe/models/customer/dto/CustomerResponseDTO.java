@@ -1,4 +1,4 @@
-package com.ecommerce.ShopZenbe.models.customer;
+package com.ecommerce.ShopZenbe.models.customer.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

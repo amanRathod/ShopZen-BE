@@ -1,4 +1,4 @@
-package com.ecommerce.ShopZenbe.models.customer;
+package com.ecommerce.ShopZenbe.models.customer.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

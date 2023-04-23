@@ -2,6 +2,9 @@ package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
 import com.ecommerce.ShopZenbe.common.exceptions.RequestValidationException;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
+import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
