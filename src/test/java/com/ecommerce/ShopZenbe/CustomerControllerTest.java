@@ -1,11 +1,12 @@
 package com.ecommerce.ShopZenbe;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
-import com.ecommerce.ShopZenbe.models.customer.CustomerController;
-import com.ecommerce.ShopZenbe.models.customer.CustomerResponseDTO;
-import com.ecommerce.ShopZenbe.models.customer.CustomerService;
+import com.ecommerce.ShopZenbe.models.customer.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,16 +38,37 @@ public class CustomerControllerTest {
     @InjectMocks
     private CustomerController customerController;
 
-    @Test
-    public void getAllCustomerTest() throws Exception {
-        // Arrange: indicate the setup stage of a test (create the data to be used for the test)
-        List<CustomerResponseDTO> customers = Arrays.asList(
+    private static final UUID customerId = UUID.randomUUID();
+    private static CustomerDTO customerDTO;
+    private static UpdateCustomerDTO updateCustomerDTO;
+    private static List<CustomerResponseDTO> listOfCustomerResponse;
+    private static CustomerResponseDTO customerResponse;
+
+    @BeforeEach
+    void setUp() {
+        customerController = new CustomerController(customerService);
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+    }
+
+    @BeforeAll
+    public static void setUpAll() {
+        customerResponse = new CustomerResponseDTO(customerId, "Alice", "Smith", "alice@gmail.com");
+
+        listOfCustomerResponse = Arrays.asList(
                 new CustomerResponseDTO(UUID.randomUUID(), "Alice", "Smith", "alice@gmail.com"),
                 new CustomerResponseDTO(UUID.randomUUID(), "Bob", "Johnson", "john@gmail.com")
         );
 
+        customerDTO = new CustomerDTO("Alice", "Smith", "alice@gmail.com");
+        updateCustomerDTO = new UpdateCustomerDTO("Alice", "Smith", "smith@gmail.com");
+    }
+
+    @Test
+    @DisplayName("Get All Customers Test")
+    public void getAllCustomerTest() throws Exception {
+        // Arrange: indicate the setup stage of a test (create the data to be used for the test)
         //  when() method specifies what should happen when a particular method is called on a mock object
-        when(customerService.getAllCustomers()).thenReturn(customers);
+        when(customerService.getAllCustomers()).thenReturn(listOfCustomerResponse);
         // ================================================================================================================
 
         // Act: indicate the action stage of a test (perform the test)
@@ -65,32 +88,78 @@ public class CustomerControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value()); // check if the response status code is 200
         assertThat(response.getMessage()).isEqualTo(""); // check if the response message is empty
-        assertThat(response.getData()).isEqualTo(customers); // check if the response data is equal to the customers list
+        assertThat(response.getData()).isEqualTo(listOfCustomerResponse); // check if the response data is equal to the customers list
     }
 
     @Test
+    @DisplayName("Get Customer by Id Test")
     public void getCustomerTest() throws Exception {
         // Arrange
-        UUID customerId = UUID.randomUUID();
-        CustomerResponseDTO customer = new CustomerResponseDTO(customerId, "Alice", "Smith", "alice@gmail.com");
-        when(customerService.getCustomer(customerId)).thenReturn(customer);
+        when(customerService.getCustomer(customerId)).thenReturn(customerResponse);
 
         // Act
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customer/" + customerId)
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/customer/" + customerId)
                         .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
+                .andExpect(result -> {
+                    // Assert
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+                    String content = result.getResponse().getContentAsString();
 
-        // Assert
-        assertThat(mvcResult.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
-        String content = mvcResult.getResponse().getContentAsString();
+                    ApiResponse<CustomerResponseDTO> response = new ObjectMapper().readValue(content,
+                            new TypeReference<ApiResponse<CustomerResponseDTO>>() {
+                            });
 
-        ApiResponse<CustomerResponseDTO> response = new ObjectMapper().readValue(content,
-                new TypeReference<ApiResponse<CustomerResponseDTO>>() {
+                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+                    assertThat(response.getMessage()).isEqualTo("");
+                    assertThat(response.getData()).isEqualTo(customerResponse);
+                    assertThat(Objects.requireNonNull(response.getData()).getId()).isEqualTo(customerId);
                 });
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getMessage()).isEqualTo("");
-        assertThat(response.getData()).isEqualTo(customer);
-        assertThat(Objects.requireNonNull(response.getData()).getId()).isEqualTo(customerId);
     }
+
+    @Test
+    @DisplayName("Add Customer Test")
+    void registerCustomerTest() throws Exception {
+        when(customerService.addCustomer(customerDTO)).thenReturn(customerResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/customer")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(customerDTO))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.CREATED.value());
+                    String content = result.getResponse().getContentAsString();
+
+                    ApiResponse<CustomerResponseDTO> response = new ObjectMapper().readValue(content,
+                            new TypeReference<ApiResponse<CustomerResponseDTO>>() {
+                            });
+
+                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED.value());
+                    assertThat(response.getMessage()).isEqualTo("Customer created successfully!");
+                    assertThat(response.getData()).isEqualTo(customerResponse);
+                });
+    }
+
+    @Test
+    @DisplayName("Update Customer Test")
+    void updateCustomerTest() throws Exception {
+        when(customerService.updateCustomer(customerId, updateCustomerDTO)).thenReturn(customerResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customer/" + customerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(updateCustomerDTO))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(result -> {
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+                    String content = result.getResponse().getContentAsString();
+
+                    ApiResponse<CustomerResponseDTO> response = new ObjectMapper().readValue(content,
+                            new TypeReference<ApiResponse<CustomerResponseDTO>>() {
+                            });
+
+                    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+                    assertThat(response.getMessage()).isEqualTo("Customer updated successfully!");
+                    assertThat(response.getData()).isEqualTo(customerResponse);
+                });
+    }
+
 }
