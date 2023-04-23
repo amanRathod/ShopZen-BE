@@ -19,11 +19,11 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getCustomers() {
+    public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getAllCustomers() {
         List<CustomerResponseDTO> customer = (List<CustomerResponseDTO>) customerService.getAllCustomers();
 
         ApiResponse<List<CustomerResponseDTO>> response = ApiResponse.<List<CustomerResponseDTO>>builder()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(HttpStatus.OK.value())
                 .message("")
                 .data(customer)
                 .build();
@@ -37,7 +37,7 @@ public class CustomerController {
         CustomerResponseDTO customer = customerService.getCustomer(customerId);
 
         ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
-                .statusCode(HttpStatus.CREATED.value())
+                .statusCode(HttpStatus.OK.value())
                 .message("")
                 .data(customer)
                 .build();
