@@ -21,13 +21,13 @@ public class OrderItem {
     private UUID id;
 
     @Column(name = "image_url")
-    private String imageUrl;
+    private String image;
 
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "unit_price")
-    private BigDecimal unitPrice;
+    private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id")

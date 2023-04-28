@@ -4,5 +4,12 @@ public enum Category {
     BOOKS,
     ELECTRONICS,
     CLOTHING,
-    HOME_APPLIANCES;
+    ACTIVEWEAR,
+    GROCERY,
+    HEALTH,
+    ACCESSORIES,
+    BEAUTY,
+    SPORTS,
+    TOYS,
+    OTHER
 }

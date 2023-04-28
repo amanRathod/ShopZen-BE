@@ -39,8 +39,8 @@ public class CustomerService {
         return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 
-    public CustomerResponseDTO addCustomer(CustomerDTO request) {
-        String email = request.getEmail();
+    public CustomerResponseDTO addCustomer(CustomerDTO customerDto) {
+        String email = customerDto.getEmail();
         if (customerRepository.existsByEmail(email)) {
             throw new DuplicateResourceException(
                     "Email already taken!", new Throwable("Please try with another email!")
@@ -48,9 +48,9 @@ public class CustomerService {
         }
 
         Customer savedCustomer = Customer.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
+                .firstName(customerDto.getFirstName())
+                .lastName(customerDto.getLastName())
+                .email(customerDto.getEmail())
                 .build();
 
         Customer customer = customerRepository.save(savedCustomer);

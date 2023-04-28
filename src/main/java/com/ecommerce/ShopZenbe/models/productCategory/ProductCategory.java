@@ -1,14 +1,12 @@
 package com.ecommerce.ShopZenbe.models.productCategory;
 
-import com.ecommerce.ShopZenbe.common.enums.Category;
 import com.ecommerce.ShopZenbe.models.product.Product;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 @Table(name="product_category")
@@ -16,13 +14,12 @@ import java.util.UUID;
 @Setter
 public class ProductCategory {
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "uuid", updatable = false, nullable = false)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false, nullable = false)
+    private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "category_name", nullable = false)
-    private Category categoryName;
+    private String categoryName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;

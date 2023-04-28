@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS product (
   units_in_stock INTEGER,
   date_created TIMESTAMP(6),
   last_updated TIMESTAMP(6),
-  category_id UUID NOT NULL REFERENCES product_category(id)
+  category_id BIGINT NOT NULL REFERENCES product_category(id)
 );
 -- ======================================
 
@@ -23,7 +23,15 @@ CREATE TYPE category AS ENUM (
     'BOOKS',
     'ELECTRONICS',
     'CLOTHING',
-    'HOME_APPLIANCES'
+    'HOME_APPLIANCES',
+    'ACTIVEWEAR'
+    'GROCERY',
+    'HEALTH',
+    'ACCESSORIES',
+    'BEAUTY',
+    'SPORTS',
+    'TOYS',
+    'OTHER'
 );
 -- ======================================
 
@@ -31,7 +39,8 @@ CREATE TYPE category AS ENUM (
 -- = Create table "Product Category"
 -- ===============================
  CREATE TABLE IF NOT EXISTS product_category (
-   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-   category_name Category
+    id BIGINT NOT NULL GENERATED ALWAYS AS IDENTITY,
+   category_name VARCHAR(255) NULL,
+   PRIMARY KEY (id)
  );
 -- ======================================

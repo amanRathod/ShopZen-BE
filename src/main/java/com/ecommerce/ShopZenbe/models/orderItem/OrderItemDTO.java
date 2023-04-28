@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OrderItemDTO {
     @NotEmpty(message = "Image URL cannot be empty")
-    private String imageUrl;
+    private String image;
 
     @NotNull(message = "Quantity cannot be null")
     @Min(value = 1, message = "Quantity must be at least 1")
@@ -26,7 +26,7 @@ public class OrderItemDTO {
 
     @NotNull(message = "Unit price cannot be null")
     @DecimalMin(value = "0.01", message = "Unit price must be greater than or equal to 0.01")
-    private BigDecimal unitPrice;
+    private BigDecimal price;
 
     @NotNull(message = "Order is mandatory")
     private UUID orderId;

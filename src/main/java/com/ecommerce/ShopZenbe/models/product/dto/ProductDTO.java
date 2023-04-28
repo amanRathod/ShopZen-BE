@@ -1,5 +1,8 @@
-package com.ecommerce.ShopZenbe.models.product;
+package com.ecommerce.ShopZenbe.models.product.dto;
 
+import com.ecommerce.ShopZenbe.common.enums.Category;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,6 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO {
+    private UUID id;
+
     @NotBlank(message = "SKU is required")
     private String sku;
 
@@ -28,19 +33,19 @@ public class ProductDTO {
 
     @NotNull(message = "Unit price is required")
     @DecimalMin(value = "0.0", inclusive = false, message = "Unit price must be greater than 0")
-    private BigDecimal unitPrice;
+    private BigDecimal price;
 
     @NotBlank(message = "Image URL is required")
-    private String imageUrl;
+    private String image;
 
     @NotNull(message = "Active status is required")
     private Boolean active = true;
 
     @NotNull(message = "Units in stock is required")
     @Min(value = 0, message = "Units in stock must be greater than or equal to 0")
-    private Integer unitsInStock;
+    private Integer stock;
 
     @NotNull(message = "Product Category is required")
-    private UUID categoryID;
-//    private ProductCategoryDto category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 }
