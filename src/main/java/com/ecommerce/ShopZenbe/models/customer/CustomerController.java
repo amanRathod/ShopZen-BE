@@ -25,12 +25,7 @@ public class CustomerController {
     public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getAllCustomers() {
         List<CustomerResponseDTO> customer = (List<CustomerResponseDTO>) customerService.getAllCustomers();
 
-        ApiResponse<List<CustomerResponseDTO>> response = ApiResponse.<List<CustomerResponseDTO>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("")
-                .data(customer)
-                .build();
-
+        ApiResponse<List<CustomerResponseDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), "", customer, "customers");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -39,12 +34,7 @@ public class CustomerController {
             @PathVariable("customerId") UUID customerId) {
         CustomerResponseDTO customer = customerService.getCustomer(customerId);
 
-        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("")
-                .data(customer)
-                .build();
-
+        ApiResponse<CustomerResponseDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "", customer, "customer");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -53,12 +43,7 @@ public class CustomerController {
             @Valid @RequestBody CustomerDTO dto) {
         CustomerResponseDTO customer = customerService.addCustomer(dto);
 
-        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("Customer created successfully!")
-                .data(customer)
-                .build();
-
+        ApiResponse<CustomerResponseDTO> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Customer created successfully!", customer, "customer");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -68,12 +53,7 @@ public class CustomerController {
             @Valid @RequestBody UpdateCustomerDTO dto) {
         CustomerResponseDTO customer = customerService.updateCustomer(customerId, dto);
 
-        ApiResponse<CustomerResponseDTO> response = ApiResponse.<CustomerResponseDTO>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("Customer updated successfully!")
-                .data(customer)
-                .build();
-
+        ApiResponse<CustomerResponseDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "Customer updated successfully!", customer, "customer");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

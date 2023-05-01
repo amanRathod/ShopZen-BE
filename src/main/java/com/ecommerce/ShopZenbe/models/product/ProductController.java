@@ -22,12 +22,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
         List<ProductDTO> products = productService.getAllProducts();
 
-        ApiResponse<List<ProductDTO>> response = ApiResponse.<List<ProductDTO>>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("All products")
-                .data(products)
-                .build();
-
+        ApiResponse<List<ProductDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), "", products,"products");
         return ResponseEntity.ok(response);
     }
 
@@ -35,12 +30,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductDTO>> getProduct(@PathVariable("productId") UUID productId) {
         ProductDTO product = productService.getProduct(productId);
 
-        ApiResponse<ProductDTO> response = ApiResponse.<ProductDTO>builder()
-                .statusCode(200)
-                .message("Product")
-                .data(product)
-                .build();
-
+        ApiResponse<ProductDTO> response = new ApiResponse<>(200, "", product, "product");
         return ResponseEntity.ok(response);
     }
 
@@ -48,12 +38,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductDTO>> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         ProductDTO product = productService.addProduct(productDTO);
 
-        ApiResponse<ProductDTO> response = ApiResponse.<ProductDTO>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message("Product created successfully!")
-                .data(product)
-                .build();
-
+        ApiResponse<ProductDTO> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Product created successfully!", product, "product");
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -61,12 +46,7 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductDTO>> updateProduct(@PathVariable("productId") UUID productId, @Valid @RequestBody UpdateProductDTO productDTO) {
         ProductDTO product = productService.updateProduct(productId, productDTO);
 
-        ApiResponse<ProductDTO> response = ApiResponse.<ProductDTO>builder()
-                .statusCode(200)
-                .message("Product updated successfully!")
-                .data(product)
-                .build();
-
+        ApiResponse<ProductDTO> response = new ApiResponse<>(200, "Product updated successfully!", product, "product");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

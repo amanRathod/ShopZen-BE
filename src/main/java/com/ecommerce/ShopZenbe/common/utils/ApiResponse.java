@@ -2,20 +2,23 @@ package com.ecommerce.ShopZenbe.common.utils;
 
 import lombok.*;
 
-@Builder
+import java.util.HashMap;
+import java.util.Map;
+
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@Data
 public class ApiResponse<T> {
     private int statusCode;
     private String message;
-    private T data;
+    private Map<String, T> data;
 
-//    public ApiResponse(int statusCode, String message, T data) {
-//        this.statusCode = statusCode;
-//        this.message = message;
-//        this.data = data;
-//    }
+    public ApiResponse(int statusCode, String message, T data, String key) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = new HashMap<String, T>();
+        this.data.put(key, data);
+    }
 }
 

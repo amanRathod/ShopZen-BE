@@ -23,7 +23,6 @@ CREATE TYPE category AS ENUM (
     'BOOKS',
     'ELECTRONICS',
     'CLOTHING',
-    'HOME_APPLIANCES',
     'ACTIVEWEAR'
     'GROCERY',
     'HEALTH',

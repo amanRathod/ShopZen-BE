@@ -1,7 +1,6 @@
 package com.ecommerce.ShopZenbe.models.product;
 
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;

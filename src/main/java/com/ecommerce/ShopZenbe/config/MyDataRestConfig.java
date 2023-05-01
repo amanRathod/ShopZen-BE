@@ -36,5 +36,12 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
         // include product id in json response body
         config.exposeIdsFor(Product.class, ProductCategory.class);
+
+        // add cors mapping
+        cors.addMapping("/api/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .maxAge(3600);
     }
 }
