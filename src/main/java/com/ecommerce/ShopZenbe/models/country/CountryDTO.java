@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CountryDTO {
-//    private Short id;
+    private Short id;
 
     @NotBlank(message = "Code is mandatory")
     @Size(min = 2, max = 2, message = "Code must be 2 characters long")

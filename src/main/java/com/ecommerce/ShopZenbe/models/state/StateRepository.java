@@ -6,8 +6,10 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.util.List;
 
-
 @RepositoryRestResource
 public interface StateRepository extends JpaRepository<State, Long> {
     List<State> findByCountryCode(@Param("code") String code);
+    List<State> findByCountryCodeOrderByNameAsc(@Param("code") String code);
+    List<State> findAllByOrderByNameAsc();
+    List<State> findByCountryName(@Param("name") String name);
 }

@@ -1,5 +1,6 @@
 package com.ecommerce.ShopZenbe.models.customer;
 
+import com.ecommerce.ShopZenbe.models.address.Address;
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,14 @@ public class Customer {
 
     @Column(name = "email")
     private String email;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
+    private Address shippingAddress;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
+    private Address billingAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
