@@ -22,8 +22,17 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @GetMapping("/profile")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
+    public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerProfile() {
+        CustomerResponseDTO customer = customerService.getCustomerProfile();
+
+        ApiResponse<CustomerResponseDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "", customer, "profile");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getAllCustomers() {
         List<CustomerResponseDTO> customer = (List<CustomerResponseDTO>) customerService.getAllCustomers();
 
@@ -32,7 +41,7 @@ public class CustomerController {
     }
 
     @GetMapping("{customerId}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomer(
             @PathVariable("customerId") UUID customerId) {
         CustomerResponseDTO customer = customerService.getCustomer(customerId);
@@ -51,7 +60,7 @@ public class CustomerController {
     }
 
     @PutMapping("{customerId}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> updateCustomer(
             @PathVariable("customerId") UUID customerId,
             @Valid @RequestBody UpdateCustomerDTO dto) {

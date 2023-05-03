@@ -8,6 +8,8 @@ import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -101,5 +103,16 @@ public class CustomerService {
             throw new ResourceNotFoundException(
                     "Customer with ID %s not found".formatted(customerId));
         }
+    }
+
+    public CustomerResponseDTO getCustomerProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        Customer customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Customer Not Found", new Throwable("Customer does not exist in the system!")));
+
+        return modelMapper.map(customer, CustomerResponseDTO.class);
     }
 }

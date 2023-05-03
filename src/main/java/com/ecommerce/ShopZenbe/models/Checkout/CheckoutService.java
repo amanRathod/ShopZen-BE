@@ -41,15 +41,9 @@ public class CheckoutService {
         // check if this is an existing customer
         String email = customer.getEmail();
 
-        Customer customerFromDB = customerRepository.findByEmail(email);
-
-        if (customerFromDB == null) {
-            throw new DuplicateResourceException(
-                    "Email already taken!", new Throwable("Please try with another email!")
-            );
-        }
-
-        customer = customerFromDB;
+        customer = customerRepository.findByEmail(email)
+                .orElseThrow(() -> new DuplicateResourceException(
+                        "Email already taken!", new Throwable("Please try with another email!")));
         customer.add(order);
 
         // save to the database
