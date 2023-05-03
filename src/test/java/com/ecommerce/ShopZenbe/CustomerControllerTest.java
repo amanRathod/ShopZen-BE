@@ -115,7 +115,6 @@ public class CustomerControllerTest {
                     assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
                     assertThat(response.getMessage()).isEqualTo("");
                     assertThat(response.getData()).isEqualTo(customerResponse);
-//                    assertThat(Objects.requireNonNull(response.getData()).getId()).isEqualTo(customerId);
                 });
     }
 

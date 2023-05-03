@@ -4,6 +4,7 @@ import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.Purchase;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.PurchaseResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/checkout")
 public class CheckoutController {
-    private final CheckoutService checkoutService;
+    @Autowired
+    private CheckoutService checkoutService;
     CheckoutController(CheckoutService checkoutService) {
         this.checkoutService = checkoutService;
     }

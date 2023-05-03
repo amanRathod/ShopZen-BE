@@ -7,6 +7,7 @@ import com.ecommerce.ShopZenbe.models.order.Order;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.Purchase;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.PurchaseResponse;
 import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Service
 public class CheckoutService {
+    @Autowired
     private CustomerRepository customerRepository;
     CheckoutService(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;

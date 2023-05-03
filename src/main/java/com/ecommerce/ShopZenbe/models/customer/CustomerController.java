@@ -7,6 +7,7 @@ import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CustomerController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<ApiResponse<List<CustomerResponseDTO>>> getAllCustomers() {
         List<CustomerResponseDTO> customer = (List<CustomerResponseDTO>) customerService.getAllCustomers();
 
@@ -30,6 +32,7 @@ public class CustomerController {
     }
 
     @GetMapping("{customerId}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomer(
             @PathVariable("customerId") UUID customerId) {
         CustomerResponseDTO customer = customerService.getCustomer(customerId);
@@ -48,6 +51,7 @@ public class CustomerController {
     }
 
     @PutMapping("{customerId}")
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> updateCustomer(
             @PathVariable("customerId") UUID customerId,
             @Valid @RequestBody UpdateCustomerDTO dto) {
@@ -58,6 +62,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("{customerId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteCustomer(
             @PathVariable("customerId") UUID customerId) {
         customerService.deleteCustomerById(customerId);
