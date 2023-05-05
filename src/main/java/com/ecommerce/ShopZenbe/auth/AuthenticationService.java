@@ -35,7 +35,7 @@ public class AuthenticationService {
         Customer savedUser = userRepository.save(user);
         String token = jwtService.generateToken(user);
 
-        CustomerDTO customerDTO = modelMapper.map(savedUser, CustomerDTO.class);
+        CustomerResponseDTO customerDTO = modelMapper.map(savedUser, CustomerResponseDTO.class);
         return new AuthenticationResponse(token, customerDTO);
     }
 
@@ -50,7 +50,7 @@ public class AuthenticationService {
         Customer principal = (Customer) authentication.getPrincipal();
         String jwtToken = jwtService.generateToken(principal);
 
-        CustomerDTO customerDTO = modelMapper.map(principal, CustomerDTO.class);
+        CustomerResponseDTO customerDTO = modelMapper.map(principal, CustomerResponseDTO.class);
         return new AuthenticationResponse(jwtToken, customerDTO);
     }
 }

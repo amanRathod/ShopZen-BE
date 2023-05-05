@@ -22,7 +22,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/profile")
+    @GetMapping("profile")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerProfile() {
         CustomerResponseDTO customer = customerService.getCustomerProfile();

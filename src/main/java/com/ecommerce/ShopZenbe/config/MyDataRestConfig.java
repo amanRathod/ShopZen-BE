@@ -1,6 +1,7 @@
 package com.ecommerce.ShopZenbe.config;
 
 import com.ecommerce.ShopZenbe.models.country.Country;
+import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.order.Order;
 import com.ecommerce.ShopZenbe.models.product.Product;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
@@ -38,12 +39,16 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
         disableHttpMethods(Order.class, config, theUnsupportedActions);
+        disableHttpMethods(Customer.class, config, theUnsupportedActions);
 
         // include product id in json response body
-        config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class);
+        config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping
-        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(theAllowedOrigins);
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(theAllowedOrigins)
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 
     private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
