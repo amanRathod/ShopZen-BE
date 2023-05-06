@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityFilterConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-//    private final LogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,10 +27,10 @@ public class SecurityFilterConfig {
                 .disable()
                 .authorizeHttpRequests()
                     .requestMatchers("/api/v1/auth/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api/products/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api/countries/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api/states/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "api/product-category/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/countries/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/states/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/product-category/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .sessionManagement()
@@ -40,10 +38,6 @@ public class SecurityFilterConfig {
                 .and()
                     .authenticationProvider(authenticationProvider)
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .logout()
-//                .logoutUrl("/api/v1/auth/logout")
-//                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
         ;
 
         return http.build();

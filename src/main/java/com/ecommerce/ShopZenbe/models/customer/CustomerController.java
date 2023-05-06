@@ -4,10 +4,13 @@ import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/profile")
+    @GetMapping("profile")
     @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerProfile() {
         CustomerResponseDTO customer = customerService.getCustomerProfile();
@@ -76,5 +79,16 @@ public class CustomerController {
             @PathVariable("customerId") UUID customerId) {
         customerService.deleteCustomerById(customerId);
         return ResponseEntity.ok("Customer deleted successfully!");
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        SecurityContextHolder.clearContext();
+        return "redirect:/login";
     }
 }

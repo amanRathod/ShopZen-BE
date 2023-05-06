@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerDTO {
-    private UUID id;
+//    private UUID id;
 
     @NotBlank(message = "First name is mandatory")
     private String firstName;
