@@ -55,11 +55,11 @@ public class CustomerControllerTest {
 
     @BeforeAll
     public static void setUpAll() {
-        customerResponse = new CustomerResponseDTO(customerId, "Alice", "Smith", "alice@gmail.com");
+        customerResponse = new CustomerResponseDTO(customerId, "Alice", "Smith", "alice@gmail.com", null);
 
         listOfCustomerResponse = Arrays.asList(
-                new CustomerResponseDTO(UUID.randomUUID(), "Alice", "Smith", "alice@gmail.com"),
-                new CustomerResponseDTO(UUID.randomUUID(), "Bob", "Johnson", "john@gmail.com")
+                new CustomerResponseDTO(UUID.randomUUID(), "Alice", "Smith", "alice@gmail.com", null),
+                new CustomerResponseDTO(UUID.randomUUID(), "Bob", "Johnson", "john@gmail.com", null)
         );
 
         customerDTO = new CustomerDTO("Alice", "Smith", "alice@gmail.com");
