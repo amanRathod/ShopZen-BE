@@ -1,5 +1,7 @@
 package com.ecommerce.ShopZenbe.models.Checkout;
 
+import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
+import com.ecommerce.ShopZenbe.common.enums.PaymentOption;
 import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
@@ -8,6 +10,8 @@ import com.ecommerce.ShopZenbe.models.Checkout.dto.Purchase;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.PurchaseResponse;
 import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,7 @@ public class CheckoutService {
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
         Order order = purchase.getOrder();
+        order.setStatus(OrderStatus.CREATED);
 
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
@@ -32,16 +37,15 @@ public class CheckoutService {
         Set<OrderItem> orderItems = purchase.getOrderItems();
         orderItems.forEach(order::add);
 
-
         order.setBillingAddress(purchase.getBillingAddress());
         order.setShippingAddress(purchase.getShippingAddress());
 
-        Customer customer = purchase.getCustomer();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // check if this is an existing customer
-        String email = customer.getEmail();
+        String email = authentication.getName();
 
-        customer = customerRepository.findByEmail(email)
+        Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new DuplicateResourceException(
                         "Email already taken!", new Throwable("Please try with another email!")));
         customer.add(order);

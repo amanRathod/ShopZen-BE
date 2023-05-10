@@ -1,5 +1,6 @@
 package com.ecommerce.ShopZenbe.models.order;
 
+import com.ecommerce.ShopZenbe.common.enums.PaymentOption;
 import com.ecommerce.ShopZenbe.models.address.Address;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
@@ -51,8 +52,12 @@ public class Order {
     private Address shippingAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="status", nullable = false)
+    @Column(name="status")
     private OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="payment_method")
+    private PaymentOption paymentMethod;
 
     @Column(name = "date_created")
     @CreationTimestamp

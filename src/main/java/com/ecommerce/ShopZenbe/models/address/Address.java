@@ -33,6 +33,12 @@ public class Address {
     @Column(name = "zip_code")
     private String zipCode;
 
+    @Column(name = "mobile")
+    private String mobile;
+
+    @Column(name = "full_name")
+    private String fullName;
+
     @OneToOne
     @PrimaryKeyJoinColumn
     private Order order;
