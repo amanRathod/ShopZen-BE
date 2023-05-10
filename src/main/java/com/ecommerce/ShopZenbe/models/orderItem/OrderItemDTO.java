@@ -28,7 +28,6 @@ public class OrderItemDTO {
     @DecimalMin(value = "0.01", message = "Unit price must be greater than or equal to 0.01")
     private BigDecimal price;
 
-    @NotNull(message = "Order is mandatory")
     private UUID orderId;
 //    private OrderDTO order;
 

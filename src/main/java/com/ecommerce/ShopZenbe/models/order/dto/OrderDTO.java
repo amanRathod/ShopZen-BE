@@ -1,6 +1,8 @@
-package com.ecommerce.ShopZenbe.models.order;
+package com.ecommerce.ShopZenbe.models.order.dto;
 
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
+import com.ecommerce.ShopZenbe.common.enums.PaymentOption;
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.DecimalMin;
@@ -20,7 +22,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    @NotBlank(message = "Order tracking number is mandatory")
     private String orderTrackingNumber;
 
     @NotNull(message = "Total price is mandatory")
@@ -31,21 +32,21 @@ public class OrderDTO {
     @Min(value = 1, message = "Total quantity must be at least 1")
     private Integer totalQuantity;
 
+    @NotNull(message = "Payment method is mandatory")
+    @Enumerated(EnumType.STRING)
+    @Column(name="payment_method", nullable = false)
+    private PaymentOption paymentMethod;
+
 //    private Set<OrderItemDTO> orderItems;
 
-    @NotNull(message = "Billing address is mandatory")
     private UUID billingAddressId;
 //    private AddressDTO billingAddress;
 
-    @NotNull(message = "Customer is mandatory")
     private UUID customerId;
 //    private CustomerDTO customer;
 
-    @NotNull(message = "Shipping address is mandatory")
     private UUID shippingAddressId;
 //    private AddressDTO shippingAddress;
 
-    @NotNull(message = "Order status is mandatory")
-    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 }

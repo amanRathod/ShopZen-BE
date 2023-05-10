@@ -22,7 +22,7 @@ public class CheckoutController {
     }
 
      @PostMapping("/purchase")
-    public ResponseEntity<ApiResponse<PurchaseResponse>> placeOrder( @RequestBody Purchase purchase) {
+    public ResponseEntity<?> placeOrder(@RequestBody Purchase purchase) {
         System.out.println("placeOrder");
          PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
 
