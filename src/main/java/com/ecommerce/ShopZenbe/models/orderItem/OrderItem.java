@@ -1,9 +1,8 @@
 package com.ecommerce.ShopZenbe.models.orderItem;
 
 import com.ecommerce.ShopZenbe.models.order.Order;
-import com.ecommerce.ShopZenbe.models.product.Product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +29,7 @@ public class OrderItem {
     private BigDecimal price;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 

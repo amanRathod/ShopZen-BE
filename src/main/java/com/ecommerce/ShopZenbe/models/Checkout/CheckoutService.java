@@ -1,7 +1,6 @@
 package com.ecommerce.ShopZenbe.models.Checkout;
 
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
-import com.ecommerce.ShopZenbe.common.enums.PaymentOption;
 import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
