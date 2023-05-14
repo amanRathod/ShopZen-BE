@@ -20,23 +20,29 @@ public class OrderItem {
     @Column(name = "id", columnDefinition = "UUID")
     private UUID id;
 
-    @Column(name = "image_url")
-    private String image;
-
     @Column(name = "quantity")
     private Integer quantity;
 
     @Column(name = "unit_price")
     private BigDecimal price;
 
+    @Column(name = "image")
+    private String image;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
-//    @Column(name="product_id")
-//    private UUID productId;
+//    @ManyToOne
+//    @JoinColumn(name = "product_id", referencedColumnName = "id")
+//    private Product product;
+    @Column(name="product_id")
+    private UUID productId;
 }
