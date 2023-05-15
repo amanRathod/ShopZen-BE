@@ -1,5 +1,6 @@
 package com.ecommerce.ShopZenbe.mails;
 
+import com.ecommerce.ShopZenbe.models.customer.Customer;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
@@ -36,6 +37,25 @@ public class MailService {
 
         Template template = freeMarkerConfigurer.getConfiguration().getTemplate("welcome.ftl");
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    public void sendResetPasswordEmail(String resetLink, Customer user) throws MessagingException, IOException, TemplateException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom("aksrathod07@gmail.com");
+        helper.setTo(user.getEmail());
+        helper.setSubject("Reset Password Request");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("resetLink", resetLink);
+        model.put("user", user);
+
+        Template template = freeMarkerConfigurer.getConfiguration().getTemplate("reset-password.ftl");
+        String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
         helper.setText(content, true);
 
         mailSender.send(message);
