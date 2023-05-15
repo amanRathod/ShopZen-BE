@@ -8,8 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.LinkedHashSet;
 
 @Service
 public class OrderService {
@@ -28,16 +31,18 @@ public class OrderService {
     }
 
     public Set<Order> getAllOrders() {
-        // get all orders placed by current user (customer) from the database and return them
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // check if this is an existing customer
         String email = authentication.getName();
 
         Customer customer = customerRepository.findByEmail(email)
                 .orElseThrow(() -> new DuplicateResourceException(
                         "Email already taken!", new Throwable("Please try with another email!")));
 
-        return customer.getOrders();
+        Set<Order> orders = customer.getOrders();
+
+        return orders.stream()
+                .sorted(Comparator.comparing(Order::getDateCreated).reversed())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }
