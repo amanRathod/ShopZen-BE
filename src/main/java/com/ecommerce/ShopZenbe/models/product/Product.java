@@ -1,6 +1,7 @@
 package com.ecommerce.ShopZenbe.models.product;
 
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -49,14 +50,15 @@ public class Product {
     private Integer stock;
 
     @Column(name = "date_created", nullable = false)
-    @CreationTimestamp
+//    @CreationTimestamp
     private LocalDateTime dateCreated;
 
     @Column(name = "last_updated")
-    @UpdateTimestamp
+//    @UpdateTimestamp
     private LocalDateTime lastUpdated;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "category_id",  referencedColumnName = "id")
     private ProductCategory category;
 

@@ -3,6 +3,7 @@ package com.ecommerce.ShopZenbe.models.customer;
 import com.ecommerce.ShopZenbe.common.enums.Role;
 import com.ecommerce.ShopZenbe.models.address.Address;
 import com.ecommerce.ShopZenbe.models.order.Order;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -46,6 +47,7 @@ public class Customer implements UserDetails {
     private Address billingAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Order> orders = new HashSet<>();
 
     public void add(Order order) {

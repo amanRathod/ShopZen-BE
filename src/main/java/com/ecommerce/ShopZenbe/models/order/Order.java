@@ -5,6 +5,7 @@ import com.ecommerce.ShopZenbe.models.address.Address;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class Order {
     private Address billingAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
