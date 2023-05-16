@@ -8,14 +8,13 @@ import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.UUID;
 
 @RestController
@@ -30,6 +29,9 @@ public class AuthenticationController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
 
     @PostMapping("register")
@@ -54,7 +56,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("forgot-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ForgotPassword request) {
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPassword request) {
         Customer user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("Email Not Found!"));
 
@@ -62,19 +64,39 @@ public class AuthenticationController {
 
         try {
             mailService.sendResetPasswordEmail(resetLink, user);
-            return ResponseEntity.ok().build();
+            ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password reset link has been sent to your email");
+            return ResponseEntity.ok().body(apiResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+    @PutMapping("reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword request) {
+         if (Boolean.FALSE.equals(redisTemplate.hasKey(request.getToken()))) {
+             return ResponseEntity.badRequest().build();
+         }
 
+        String email = (String) redisTemplate.opsForValue().get(request.getToken());
+
+        var user = userRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        authenticationService.resetPassword(user.get(), request.getPassword());
+        redisTemplate.delete(request.getToken());
+
+        ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password has been reset successfully!");
+        return ResponseEntity.ok().body(apiResponse);
+    }
 
     private String generateResetLink(Customer user) {
         String token = UUID.randomUUID().toString();
-        String resetLink = "https://shop-zen-crm.vercel.app/reset-password?token=" + token;
+        String resetLink = "https://shop-zen-crm.vercel.app/reset-password/" + token;
 
-        // TODO: Store token into redis
+        redisTemplate.opsForValue().set(token, user.getEmail(), Duration.ofMinutes(1));
         return resetLink;
     }
 
