@@ -53,4 +53,13 @@ public class AuthenticationService {
         CustomerResponseDTO customerDTO = modelMapper.map(principal, CustomerResponseDTO.class);
         return new AuthenticationResponse(jwtToken, customerDTO);
     }
+
+    public AuthenticationResponse resetPassword(Customer user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        Customer savedUser = userRepository.save(user);
+        String token = jwtService.generateToken(user);
+
+        CustomerResponseDTO customerDTO = modelMapper.map(savedUser, CustomerResponseDTO.class);
+        return new AuthenticationResponse(token, customerDTO);
+    }
 }

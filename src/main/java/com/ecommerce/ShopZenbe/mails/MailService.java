@@ -1,0 +1,83 @@
+package com.ecommerce.ShopZenbe.mails;
+
+import com.ecommerce.ShopZenbe.models.customer.Customer;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+public class MailService {
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Autowired
+    private FreeMarkerConfigurer freeMarkerConfigurer;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+    public void sendWelcomeEmail(String toEmail, String name) throws MessagingException, TemplateException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(fromEmail);
+        helper.setTo(toEmail);
+        helper.setSubject("Welcome to our website");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("name", name);
+
+        Template template = freeMarkerConfigurer.getConfiguration().getTemplate("welcome.ftl");
+        String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    public void sendResetPasswordEmail(String resetLink, Customer user) throws MessagingException, IOException, TemplateException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setFrom(fromEmail);
+        helper.setTo(user.getEmail());
+        helper.setSubject("Reset Password Request");
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("resetLink", resetLink);
+        model.put("user", user);
+
+        Template template = freeMarkerConfigurer.getConfiguration().getTemplate("reset-password.ftl");
+        String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+        helper.setText(content, true);
+        mailSender.send(message);
+    }
+
+    public void sendPasswordResetConfirmationEmail(Customer user) throws MessagingException, IOException, TemplateException {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(fromEmail);
+            helper.setTo(user.getEmail());
+            helper.setSubject("Password Reset Confirmation");
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("user", user);
+
+            Template template = freeMarkerConfigurer.getConfiguration().getTemplate("reset-password-confirmation.ftl");
+            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+            helper.setText(content, true);
+            mailSender.send(message);
+    }
+}

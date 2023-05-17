@@ -20,5 +20,10 @@ public class ApiResponse<T> {
         this.data = new HashMap<String, T>();
         this.data.put(key, data);
     }
+
+    public ApiResponse(int statusCode, String message) {
+        this.statusCode = statusCode;
+        this.message = message;
+    }
 }
 
