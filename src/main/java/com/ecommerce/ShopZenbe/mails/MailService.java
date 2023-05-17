@@ -6,6 +6,7 @@ import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,10 +26,13 @@ public class MailService {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
     public void sendWelcomeEmail(String toEmail, String name) throws MessagingException, TemplateException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom("aksrathod07@gmail.com");
+        helper.setFrom(fromEmail);
         helper.setTo(toEmail);
         helper.setSubject("Welcome to our website");
 
@@ -45,7 +49,7 @@ public class MailService {
     public void sendResetPasswordEmail(String resetLink, Customer user) throws MessagingException, IOException, TemplateException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
-        helper.setFrom("aksrathod07@gmail.com");
+        helper.setFrom(fromEmail);
         helper.setTo(user.getEmail());
         helper.setSubject("Reset Password Request");
 
@@ -57,7 +61,23 @@ public class MailService {
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
         helper.setText(content, true);
-
         mailSender.send(message);
+    }
+
+    public void sendPasswordResetConfirmationEmail(Customer user) throws MessagingException, IOException, TemplateException {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom(fromEmail);
+            helper.setTo(user.getEmail());
+            helper.setSubject("Password Reset Confirmation");
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("user", user);
+
+            Template template = freeMarkerConfigurer.getConfiguration().getTemplate("reset-password-confirmation.ftl");
+            String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+
+            helper.setText(content, true);
+            mailSender.send(message);
     }
 }

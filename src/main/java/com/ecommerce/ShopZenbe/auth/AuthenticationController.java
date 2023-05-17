@@ -5,6 +5,8 @@ import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import com.ecommerce.ShopZenbe.mails.MailService;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
+import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.UUID;
 
@@ -72,7 +75,7 @@ public class AuthenticationController {
     }
 
     @PutMapping("reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword request) {
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword request) throws MessagingException, TemplateException, IOException {
          if (Boolean.FALSE.equals(redisTemplate.hasKey(request.getToken()))) {
              return ResponseEntity.badRequest().build();
          }
@@ -87,6 +90,7 @@ public class AuthenticationController {
 
         authenticationService.resetPassword(user.get(), request.getPassword());
         redisTemplate.delete(request.getToken());
+        mailService.sendPasswordResetConfirmationEmail(user.get());
 
         ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password has been reset successfully!");
         return ResponseEntity.ok().body(apiResponse);
