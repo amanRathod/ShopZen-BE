@@ -50,7 +50,6 @@ public class AuthenticationController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
         AuthenticationResponse response = authenticationService.login(request);
-
         ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(200, "Logged in successfully!", response, "auth");
 
         return ResponseEntity.ok()
@@ -59,49 +58,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("forgot-password")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPassword request) {
-        Customer user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("Email Not Found!"));
-
-        String resetLink = generateResetLink(user);
-
-        try {
-            mailService.sendResetPasswordEmail(resetLink, user);
-            ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password reset link has been sent to your email");
-            return ResponseEntity.ok().body(apiResponse);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPassword request) throws MessagingException, TemplateException, IOException {
+        authenticationService.forgotPassword(request);
+        ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password reset link has been sent to your email");
+        return ResponseEntity.ok().body(apiResponse);
     }
 
     @PutMapping("reset-password")
     public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPassword request) throws MessagingException, TemplateException, IOException {
-         if (Boolean.FALSE.equals(redisTemplate.hasKey(request.getToken()))) {
-             return ResponseEntity.badRequest().build();
-         }
-
-        String email = (String) redisTemplate.opsForValue().get(request.getToken());
-
-        var user = userRepository.findByEmail(email);
-
-        if (user.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        authenticationService.resetPassword(user.get(), request.getPassword());
-        redisTemplate.delete(request.getToken());
-        mailService.sendPasswordResetConfirmationEmail(user.get());
-
+        authenticationService.resetPassword(request);
         ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Password has been reset successfully!");
         return ResponseEntity.ok().body(apiResponse);
     }
-
-    private String generateResetLink(Customer user) {
-        String token = UUID.randomUUID().toString();
-        String resetLink = "https://shop-zen-crm.vercel.app/reset-password/" + token;
-
-        redisTemplate.opsForValue().set(token, user.getEmail(), Duration.ofMinutes(1));
-        return resetLink;
-    }
-
 }

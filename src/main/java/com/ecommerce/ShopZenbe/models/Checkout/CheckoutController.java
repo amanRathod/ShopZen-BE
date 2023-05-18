@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/checkout")
+@RequestMapping("/api/v1/checkout")
 public class CheckoutController {
     @Autowired
     private CheckoutService checkoutService;
@@ -23,9 +23,7 @@ public class CheckoutController {
 
      @PostMapping("/purchase")
     public ResponseEntity<?> placeOrder(@RequestBody Purchase purchase) {
-        System.out.println("placeOrder");
          PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
-
          ApiResponse<PurchaseResponse> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Order placed successfully!", purchaseResponse, "orderTrackingNumber");
          return ResponseEntity.status(HttpStatus.CREATED).body(response);
      }

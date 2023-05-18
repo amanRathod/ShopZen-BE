@@ -38,6 +38,6 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid Credentials", new Throwable("Invalid email or password!")));
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid Credentials"));
     }
 }
