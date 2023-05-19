@@ -1,9 +1,7 @@
 package com.ecommerce.ShopZenbe.auth;
 
-import com.ecommerce.ShopZenbe.common.exceptions.ResourceNotFoundException;
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
 import com.ecommerce.ShopZenbe.mails.MailService;
-import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
@@ -17,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,19 +22,16 @@ import java.util.UUID;
 public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
-
     @Autowired
     private CustomerRepository userRepository;
-
     @Autowired
     private MailService mailService;
-
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
 
     @PostMapping("register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, TemplateException, IOException {
         AuthenticationResponse response = authenticationService.register(request);
         ApiResponse<AuthenticationResponse> apiResponse = new ApiResponse<>(201, "Account registered successfully!", response, "auth");
 

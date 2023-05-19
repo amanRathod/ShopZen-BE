@@ -1,6 +1,6 @@
 <html>
 <body>
-    <p>Dear ${name},</p>
+    <p>Dear ${user.getFirstName()} ${user.getLastName()},</p>
     <p>Welcome to our website!</p>
 </body>
 </html>

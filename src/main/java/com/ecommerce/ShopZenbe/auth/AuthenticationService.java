@@ -12,10 +12,8 @@ import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +35,10 @@ public class AuthenticationService {
     private final MailService mailService;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
+
+    public AuthenticationResponse register(RegisterRequest request) throws MessagingException, TemplateException, IOException {
         boolean userExists = userRepository.existsByEmail(request.getEmail());
         if (userExists) throw new DuplicateResourceException("Email already taken!", new Throwable("Please try with another email!"));
 
@@ -51,6 +52,7 @@ public class AuthenticationService {
 
         Customer savedUser = userRepository.save(user);
         String token = jwtService.generateToken(user);
+        mailService.sendWelcomeEmail(user);
 
         CustomerResponseDTO customerDTO = modelMapper.map(savedUser, CustomerResponseDTO.class);
         return new AuthenticationResponse(token, customerDTO);
@@ -74,7 +76,7 @@ public class AuthenticationService {
 
     public void forgotPassword(ForgotPassword request) throws MessagingException, TemplateException, IOException {
         Customer user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User Not Found", new Throwable("User does not exist in the system!")));
+                .orElseThrow(() -> new ResourceNotFoundException("User Not Found", new Throwable("User does not exists in the system!")));
 
         String resetLink = generateResetLink(user);
         mailService.sendResetPasswordEmail(resetLink, user);
@@ -98,9 +100,9 @@ public class AuthenticationService {
 
     private String generateResetLink(Customer user) {
         String token = UUID.randomUUID().toString();
-        String resetLink = "https://shop-zen-crm.vercel.app/reset-password/" + token;
+        String resetLink = frontendUrl + "/reset-password/" + token;
 
-        redisTemplate.opsForValue().set(token, user.getEmail(), Duration.ofMinutes(1));
+        redisTemplate.opsForValue().set(token, user.getEmail(), Duration.ofHours(1));
         return resetLink;
     }
 }

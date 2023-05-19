@@ -96,8 +96,8 @@ public class DefaultExceptionHandler {
                                                     HttpServletRequest request) {
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
-                e.getMessage(),
-                "",
+                "Internal Server Error",
+                "Please contact the administrator!",
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now()
         );

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<ProductDTO>> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         ProductDTO product = productService.addProduct(productDTO);
 
@@ -43,6 +45,7 @@ public class ProductController {
     }
 
     @PutMapping("{productId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<ProductDTO>> updateProduct(@PathVariable("productId") UUID productId, @Valid @RequestBody UpdateProductDTO productDTO) {
         ProductDTO product = productService.updateProduct(productId, productDTO);
 
@@ -51,6 +54,7 @@ public class ProductController {
     }
 
     @DeleteMapping("{productId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String deleteProduct() {
         return "Delete product";
     }

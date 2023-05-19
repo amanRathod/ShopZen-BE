@@ -31,18 +31,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PostMapping("/welcome-email")
-    public ResponseEntity<Void> sendWelcomeEmail(@RequestParam String email, @RequestParam String name) {
-        try {
-            mailService.sendWelcomeEmail(email, name);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     @GetMapping("profile")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER') OR hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> getCustomerProfile() {
         CustomerResponseDTO customer = customerService.getCustomerProfile();
 
@@ -70,6 +60,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<ApiResponse<CustomerResponseDTO>> registerCustomer(
             @Valid @RequestBody CustomerDTO dto) {
         CustomerResponseDTO customer = customerService.addCustomer(dto);
