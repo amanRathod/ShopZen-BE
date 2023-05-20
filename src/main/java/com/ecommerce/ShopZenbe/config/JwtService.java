@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${spring.application.security.jwt.secret-key}")
+    @Value("${spring.application.security.jwt.secretKey}")
     private String secretKey;
 
     @Value("${spring.application.security.jwt.expiration}")
