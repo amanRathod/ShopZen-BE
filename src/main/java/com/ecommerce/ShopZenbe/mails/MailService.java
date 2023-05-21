@@ -3,11 +3,14 @@ package com.ecommerce.ShopZenbe.mails;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -25,8 +28,21 @@ public class MailService {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
-    @Value("${spring.mail.username}")
     private String fromEmail;
+    private String smtpPassword;
+
+    @PostConstruct
+    public void configureMailSender() {
+        JavaMailSenderImpl senderImpl = (JavaMailSenderImpl) mailSender;
+        senderImpl.setPassword(smtpPassword);
+    }
+
+    @PostConstruct
+    public void init() {
+        Dotenv dotenv = Dotenv.load();
+        fromEmail = dotenv.get("SMTP_USERNAME");
+        smtpPassword = dotenv.get("SMTP_PASSWORD");
+    }
 
     public void sendEmail(String toEmail, String subject, String templateName, Map<String, Object> model)
             throws MessagingException, TemplateException, IOException {
