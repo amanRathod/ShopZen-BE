@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //@ComponentScan
 public class MyAppConfig  implements WebMvcConfigurer {
 
-    @Value("${allowed.origins}")
-    private String[] theAllowedOrigins;
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @Value("${spring.data.rest.base-path}")
     private String basePath;
@@ -23,7 +23,7 @@ public class MyAppConfig  implements WebMvcConfigurer {
 //    @CrossOrigin(origins = "http://localhost:3000")
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://shop-zen-crm.vercel.app")
+                .allowedOrigins(frontendUrl)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization")

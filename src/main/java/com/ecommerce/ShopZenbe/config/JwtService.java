@@ -1,10 +1,11 @@
 package com.ecommerce.ShopZenbe.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,15 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    @Value("${spring.application.security.jwt.secretKey}")
     private String secretKey;
-
-    @Value("${spring.application.security.jwt.expiration}")
     private long jwtExpiration;
+
+    @PostConstruct
+    private void init() {
+        Dotenv dotenv = Dotenv.load();
+        secretKey = dotenv.get("JWT_SECRET_KEY");
+        jwtExpiration = Long.parseLong(dotenv.get("JWT_EXPIRATION"));
+    }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

@@ -17,8 +17,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
-    @Value("${allowed.origins}")
-    private String[] theAllowedOrigins;
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @Value("${spring.data.rest.base-path}")
     private String basePath;
@@ -45,7 +45,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping
-        cors.addMapping(config.getBasePath() + "/**").allowedOrigins("https://shop-zen-crm.vercel.app")
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(frontendUrl)
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);
