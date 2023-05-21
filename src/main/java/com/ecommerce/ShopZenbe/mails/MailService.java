@@ -28,21 +28,8 @@ public class MailService {
     @Autowired
     private FreeMarkerConfigurer freeMarkerConfigurer;
 
+    @Value("${spring.mail.username}")
     private String fromEmail;
-    private String smtpPassword;
-
-    @PostConstruct
-    public void configureMailSender() {
-        JavaMailSenderImpl senderImpl = (JavaMailSenderImpl) mailSender;
-        senderImpl.setPassword(smtpPassword);
-    }
-
-    @PostConstruct
-    public void init() {
-        Dotenv dotenv = Dotenv.load();
-        fromEmail = dotenv.get("SMTP_USERNAME");
-        smtpPassword = dotenv.get("SMTP_PASSWORD");
-    }
 
     public void sendEmail(String toEmail, String subject, String templateName, Map<String, Object> model)
             throws MessagingException, TemplateException, IOException {
