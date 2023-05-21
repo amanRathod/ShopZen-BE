@@ -45,7 +45,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping
-        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(frontendUrl)
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins("https://shop-zen-crm.vercel.app")
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);

@@ -23,7 +23,7 @@ public class MyAppConfig  implements WebMvcConfigurer {
 //    @CrossOrigin(origins = "http://localhost:3000")
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(frontendUrl)
+                .allowedOrigins("https://shop-zen-crm.vercel.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Authorization")
