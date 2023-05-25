@@ -19,9 +19,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     @Value("${app.frontend.url}")
     private String frontendUrl;
 
-    @Value("${spring.data.rest.base-path}")
-    private String basePath;
-
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -38,7 +35,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
 
-        // include product id in json response body
         config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping

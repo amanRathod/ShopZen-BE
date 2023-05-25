@@ -2,7 +2,6 @@ package com.ecommerce.ShopZenbe.models.address;
 
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
