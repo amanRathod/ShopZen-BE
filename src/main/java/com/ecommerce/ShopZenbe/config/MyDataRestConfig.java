@@ -2,7 +2,6 @@ package com.ecommerce.ShopZenbe.config;
 
 import com.ecommerce.ShopZenbe.models.country.Country;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
-import com.ecommerce.ShopZenbe.models.order.Order;
 import com.ecommerce.ShopZenbe.models.product.Product;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import com.ecommerce.ShopZenbe.models.state.State;
@@ -20,9 +19,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     @Value("${app.frontend.url}")
     private String frontendUrl;
 
-    @Value("${spring.data.rest.base-path}")
-    private String basePath;
-
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
@@ -38,10 +34,7 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(ProductCategory.class, config, theUnsupportedActions);
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
-        disableHttpMethods(Order.class, config, theUnsupportedActions);
-        disableHttpMethods(Customer.class, config, theUnsupportedActions);
 
-        // include product id in json response body
         config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping

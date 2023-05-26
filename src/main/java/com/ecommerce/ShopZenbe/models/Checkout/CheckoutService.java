@@ -1,7 +1,7 @@
 package com.ecommerce.ShopZenbe.models.Checkout;
 
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
-import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
+import com.ecommerce.ShopZenbe.models.Checkout.dto.PaymentInfo;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
 import com.ecommerce.ShopZenbe.models.order.Order;
@@ -9,7 +9,11 @@ import com.ecommerce.ShopZenbe.models.Checkout.dto.Purchase;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.PurchaseResponse;
 import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
 import com.ecommerce.ShopZenbe.models.product.ProductRepository;
+import com.stripe.model.PaymentIntent;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,9 +24,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class CheckoutService {
+    @Value("${stripe.key.secret}")
+    private String secretKey;
+
     @Autowired
     private CustomerRepository customerRepository;
-
     @Autowired
     private ProductRepository productRepository;
 
@@ -54,6 +60,22 @@ public class CheckoutService {
         });
 
         return new PurchaseResponse(orderTrackingNumber);
+    }
+
+    public PaymentIntent createPaymentIntent(PaymentInfo paymentInfo) throws StripeException {
+        Stripe.apiKey = secretKey;
+
+        List<String> paymentMethodTypes = new ArrayList<>();
+        paymentMethodTypes.add("card");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("amount", paymentInfo.getAmount());
+        params.put("currency", paymentInfo.getCurrency());
+        params.put("payment_method_types", paymentMethodTypes);
+        params.put("description", "ShopZen Order");
+        params.put("receipt_email", paymentInfo.getReceiptEmail());
+
+        return PaymentIntent.create(params);
     }
 
     private String generateOrderTrackingNumber() {
