@@ -22,6 +22,7 @@ public class JwtService {
     @Value("${spring.application.security.jwt.expiration}")
     private long jwtExpiration;
 
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

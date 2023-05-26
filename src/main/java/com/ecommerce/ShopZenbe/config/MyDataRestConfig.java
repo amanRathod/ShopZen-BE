@@ -2,7 +2,6 @@ package com.ecommerce.ShopZenbe.config;
 
 import com.ecommerce.ShopZenbe.models.country.Country;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
-import com.ecommerce.ShopZenbe.models.order.Order;
 import com.ecommerce.ShopZenbe.models.product.Product;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import com.ecommerce.ShopZenbe.models.state.State;
@@ -17,11 +16,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
-    @Value("${allowed.origins}")
-    private String[] theAllowedOrigins;
-
-    @Value("${spring.data.rest.base-path}")
-    private String basePath;
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     @Bean
     public ModelMapper modelMapper() {
@@ -38,14 +34,11 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(ProductCategory.class, config, theUnsupportedActions);
         disableHttpMethods(Country.class, config, theUnsupportedActions);
         disableHttpMethods(State.class, config, theUnsupportedActions);
-        disableHttpMethods(Order.class, config, theUnsupportedActions);
-        disableHttpMethods(Customer.class, config, theUnsupportedActions);
 
-        // include product id in json response body
         config.exposeIdsFor(Product.class, ProductCategory.class, Country.class, State.class, Customer.class);
 
         // add cors mapping
-        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(theAllowedOrigins)
+        cors.addMapping(config.getBasePath() + "/**").allowedOrigins(frontendUrl)
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .allowCredentials(true);

@@ -7,7 +7,6 @@ import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;

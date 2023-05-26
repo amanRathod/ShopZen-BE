@@ -94,6 +94,7 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(Exception e,
                                                     HttpServletRequest request) {
+        System.out.println("Error message: " + e.getMessage());
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
                 "Internal Server Error",

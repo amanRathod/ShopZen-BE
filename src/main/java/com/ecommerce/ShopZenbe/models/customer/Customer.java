@@ -50,6 +50,9 @@ public class Customer implements UserDetails {
     @JsonIgnore
     private Set<Order> orders = new HashSet<>();
 
+    @OneToMany(mappedBy = "customerId", cascade = CascadeType.ALL)
+    private List<Address> addresses;
+
     public void add(Order order) {
         if (order != null) {
             if (orders == null) {

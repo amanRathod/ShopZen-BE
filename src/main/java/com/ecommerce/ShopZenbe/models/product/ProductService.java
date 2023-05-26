@@ -4,7 +4,6 @@ import com.ecommerce.ShopZenbe.models.product.dto.ProductDTO;
 import com.ecommerce.ShopZenbe.models.product.dto.UpdateProductDTO;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategory;
 import com.ecommerce.ShopZenbe.models.productCategory.ProductCategoryRepository;
-import com.ecommerce.ShopZenbe.models.productCategory.ProductCategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -22,9 +21,6 @@ public class ProductService {
     private ProductCategoryRepository productCategoryRepository;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private ProductCategoryService productCategoryService;
-
 
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();

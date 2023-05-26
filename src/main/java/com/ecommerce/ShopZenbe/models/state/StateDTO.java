@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StateDTO {
-//    private Long id;
     @NotBlank(message = "Name is mandatory")
     private String name;
 

@@ -1,7 +1,6 @@
 package com.ecommerce.ShopZenbe.models.orderItem;
 
 import com.ecommerce.ShopZenbe.models.order.Order;
-import com.ecommerce.ShopZenbe.models.product.Product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,9 +39,6 @@ public class OrderItem {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
-//    @ManyToOne
-//    @JoinColumn(name = "product_id", referencedColumnName = "id")
-//    private Product product;
     @Column(name="product_id")
     private UUID productId;
 }

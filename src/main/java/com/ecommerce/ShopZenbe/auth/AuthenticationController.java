@@ -1,14 +1,11 @@
 package com.ecommerce.ShopZenbe.auth;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
-import com.ecommerce.ShopZenbe.mails.MailService;
-import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
 import freemarker.template.TemplateException;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
     @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
-    private CustomerRepository userRepository;
-    @Autowired
-    private MailService mailService;
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final AuthenticationService authenticationService;
 
 
     @PostMapping("register")
