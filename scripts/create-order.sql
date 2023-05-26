@@ -22,6 +22,7 @@ CREATE TYPE orderStatus AS ENUM  (
    customer_id UUID DEFAULT NULL,
    shipping_address_id UUID DEFAULT NULL,
    status OrderStatus,
+   payment_method PaymentMethod,
    date_created timestamp(6) DEFAULT NULL,
    last_updated timestamp(6) DEFAULT NULL,
    UNIQUE (billing_address_id),
@@ -37,7 +38,9 @@ CREATE TYPE orderStatus AS ENUM  (
 -- ===============================
  CREATE TABLE order_item (
    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-   image_url varchar(255),
+   image varchar(255),
+   description varchar(400),
+   name varchar(255),
    quantity integer,
    unit_price numeric(19,2),
    order_id UUID,

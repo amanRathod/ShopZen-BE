@@ -32,3 +32,8 @@ CREATE INDEX idx_customer_email ON "customer" (email);
 CREATE INDEX idx_state_country_id ON state (country_id);
 CREATE INDEX idx_country_code ON country (code);
 
+-- ===============================
+-- =  Create indexes for the customer_id column on the address table
+-- ===============================
+CREATE INDEX idx_address_customer_id ON address (customer_id);
+

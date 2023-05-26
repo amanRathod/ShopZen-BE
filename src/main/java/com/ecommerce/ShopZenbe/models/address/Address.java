@@ -1,5 +1,6 @@
 package com.ecommerce.ShopZenbe.models.address;
 
+import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.order.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -37,6 +38,10 @@ public class Address {
 
     @Column(name = "full_name")
     private String fullName;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customerId;
 
     @OneToOne
     @PrimaryKeyJoinColumn
