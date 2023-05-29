@@ -27,11 +27,14 @@ public class OrderService {
         String email = authentication.getName();
 
         Optional<Customer> customer = customerRepository.findByEmail(email);
-        Set<Order> orders =  customer.map(Customer::getOrders)
+
+        Set<Order> orders = customer.map(Customer::getOrders)
                 .orElse(Collections.emptySet());
 
-        return orders.stream()
+        List<Order> sortedOrders = orders.stream()
                 .sorted(Comparator.comparing(Order::getDateCreated).reversed())
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toList());
+
+        return new LinkedHashSet<>(sortedOrders);
     }
 }

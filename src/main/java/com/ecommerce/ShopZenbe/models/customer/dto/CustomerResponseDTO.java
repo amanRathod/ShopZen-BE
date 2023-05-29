@@ -1,7 +1,10 @@
 package com.ecommerce.ShopZenbe.models.customer.dto;
 
+import com.ecommerce.ShopZenbe.models.address.dto.AddressDTO;
+
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,4 +19,6 @@ public class CustomerResponseDTO {
     private String lastName;
     private String email;
     private String image;
+    private AddressDTO primaryAddress;
+    private List<AddressDTO> addresses;
 }

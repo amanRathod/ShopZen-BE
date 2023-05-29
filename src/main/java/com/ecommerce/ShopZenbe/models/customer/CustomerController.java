@@ -1,14 +1,12 @@
 package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
-import com.ecommerce.ShopZenbe.mails.MailService;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,14 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-//@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
 @RequestMapping("api/v1/customer")
 public class CustomerController {
     private final CustomerService customerService;
-
-    @Autowired
-    private MailService mailService;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -39,6 +33,16 @@ public class CustomerController {
         ApiResponse<CustomerResponseDTO> response = new ApiResponse<>(HttpStatus.OK.value(), "", customer, "profile");
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+
+    // TODO: Get customer address by id
+    // @GetMapping("address")
+    // @PreAuthorize("hasAuthority('CUSTOMER') OR hasAuthority('ADMIN')")
+    // public ResponseEntity<ApiResponse<List<Address>>> getCustomerAddress() {
+    //     List<Address> address = customerService.getCustomerAddresses();
+
+    //     ApiResponse<List<Address>> response = new ApiResponse<>(HttpStatus.OK.value(), "", address, "addresses");
+    //     return ResponseEntity.status(HttpStatus.OK).body(response);
+    // }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")

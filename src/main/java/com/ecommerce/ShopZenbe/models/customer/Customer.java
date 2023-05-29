@@ -3,13 +3,17 @@ package com.ecommerce.ShopZenbe.models.customer;
 import com.ecommerce.ShopZenbe.common.enums.Role;
 import com.ecommerce.ShopZenbe.models.address.Address;
 import com.ecommerce.ShopZenbe.models.order.Order;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @Data
@@ -39,19 +43,22 @@ public class Customer implements UserDetails {
     private Role role;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
-    private Address shippingAddress;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
-    private Address billingAddress;
+    @JoinColumn(name = "primary_address_id", referencedColumnName = "id")
+    private Address primaryAddress;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    @JsonIgnore
     private Set<Order> orders = new HashSet<>();
 
-    @OneToMany(mappedBy = "customerId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Address> addresses;
+
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private Timestamp dateCreated;
+
+    @Column(name = "last_updated")
+    @UpdateTimestamp
+    private Timestamp lastUpdated;
 
     public void add(Order order) {
         if (order != null) {

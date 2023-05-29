@@ -5,7 +5,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="product_category")
@@ -19,6 +23,14 @@ public class ProductCategory {
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
+
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private Timestamp dateCreated;
+
+    @Column(name = "last_updated")
+    @UpdateTimestamp
+    private Timestamp lastUpdated;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Set<Product> products;

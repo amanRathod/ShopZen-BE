@@ -2,6 +2,8 @@ package com.ecommerce.ShopZenbe.models.Checkout;
 
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
 import com.ecommerce.ShopZenbe.models.Checkout.dto.PaymentInfo;
+import com.ecommerce.ShopZenbe.models.address.Address;
+import com.ecommerce.ShopZenbe.models.address.AddressRepository;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
 import com.ecommerce.ShopZenbe.models.order.Order;
@@ -31,6 +33,8 @@ public class CheckoutService {
     private CustomerRepository customerRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private AddressRepository addressRepository;
 
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
@@ -47,14 +51,40 @@ public class CheckoutService {
                 .collect(Collectors.toMap(OrderItem::getProductId, OrderItem::getQuantity));
         productRepository.updateQuantities(productQuantities);
 
-        order.setBillingAddress(purchase.getBillingAddress());
-        order.setShippingAddress(purchase.getShippingAddress());
+        Address billingAddress = purchase.getBillingAddress();
+        Address shippingAddress = purchase.getShippingAddress();
+
+        if (billingAddress.getId() != null) {
+            billingAddress = addressRepository.findById(billingAddress.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Billing address not found"));
+        } else {
+            billingAddress.setIsBilling(true);
+            billingAddress.setIsShipping(false);
+        }
+
+        if (shippingAddress.getId() != null) {
+            shippingAddress = addressRepository.findById(shippingAddress.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Shipping address not found"));
+        } else {
+            shippingAddress.setIsBilling(false);
+            shippingAddress.setIsShipping(true);
+        }
+
+        order.setBillingAddress(billingAddress);
+        order.setShippingAddress(shippingAddress);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-
         Optional<Customer> customerOptional = customerRepository.findByEmail(email);
+
+        Address finalBillingAddress = billingAddress;
+        Address finalShippingAddress = shippingAddress;
+
         customerOptional.ifPresent(customer -> {
+            if (finalBillingAddress.getId() == null) finalBillingAddress.setCustomer(customer);
+            if (finalShippingAddress.getId() == null) finalShippingAddress.setCustomer(customer);
+
+            customer.setPrimaryAddress(finalShippingAddress);
             customer.add(order);
             customerRepository.save(customer);
         });

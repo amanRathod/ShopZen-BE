@@ -2,9 +2,12 @@ package com.ecommerce.ShopZenbe.models.customer;
 
 import com.ecommerce.ShopZenbe.common.exceptions.DuplicateResourceException;
 import com.ecommerce.ShopZenbe.common.exceptions.RequestValidationException;
+import com.ecommerce.ShopZenbe.models.address.Address;
+import com.ecommerce.ShopZenbe.models.address.dto.AddressDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.CustomerResponseDTO;
 import com.ecommerce.ShopZenbe.models.customer.dto.UpdateCustomerDTO;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -113,6 +116,24 @@ public class CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Customer Not Found", new Throwable("Customer does not exist in the system!")));
 
-        return modelMapper.map(customer, CustomerResponseDTO.class);
+        CustomerResponseDTO responseDTO = modelMapper.map(customer, CustomerResponseDTO.class);
+        responseDTO.setAddresses(customer.getAddresses().stream()
+            .filter(Address::getIsShipping)
+            .map(address -> modelMapper.map(address, AddressDTO.class))
+            .collect(Collectors.toList()));
+
+        return responseDTO;
     }
+
+    // TODO: Get customer addresses
+    // public List<Address> getCustomerAddresses() {
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //     String email = authentication.getName();
+
+    //     Customer customer = customerRepository.findByEmail(email)
+    //             .orElseThrow(() -> new ResourceNotFoundException(
+    //                     "Customer Not Found", new Throwable("Customer does not exist in the system!")));
+
+    //     return customer.getAddresses();
+    // }
 }

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.5</version>
+		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ecommerce</groupId>
@@ -106,6 +106,12 @@
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>3.0.3</version>
 		</dependency>
+		<dependency>
+    <groupId>org.apache.logging.log4j</groupId>
+    <artifactId>log4j-slf4j2-impl</artifactId>
+    <version>2.19.0</version>
+    <scope>runtime</scope>
+</dependency>
 	</dependencies>
 
 	<build>
