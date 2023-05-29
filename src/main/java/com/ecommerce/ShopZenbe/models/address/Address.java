@@ -4,7 +4,11 @@ import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,10 +16,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@Data
 @Entity
 @Table(name = "address")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -61,9 +69,4 @@ public class Address {
     @Column(name = "last_updated")
     @UpdateTimestamp
     private Timestamp lastUpdated;
-
-//    @OneToOne
-//    @JsonIgnore
-//    @PrimaryKeyJoinColumn
-//    private Order order;
 }

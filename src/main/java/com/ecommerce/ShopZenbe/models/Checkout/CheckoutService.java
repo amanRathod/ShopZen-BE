@@ -39,7 +39,7 @@ public class CheckoutService {
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
         Order order = purchase.getOrder();
-        order.setStatus(OrderStatus.CREATED);
+        order.setStatus(OrderStatus.PENDING);
 
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
