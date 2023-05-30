@@ -1,6 +1,8 @@
 package com.ecommerce.ShopZenbe.models.order.dto;
 
 import com.ecommerce.ShopZenbe.common.enums.OrderStatus;
+import com.ecommerce.ShopZenbe.models.address.dto.AddressDTO;
+import com.ecommerce.ShopZenbe.models.orderItem.OrderItem;
 import com.ecommerce.ShopZenbe.common.enums.PaymentOption;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -14,13 +16,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.Set;
+import java.sql.Timestamp;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
+    private String id;
     private String orderTrackingNumber;
 
     @NotNull(message = "Total price is mandatory")
@@ -36,16 +40,10 @@ public class OrderDTO {
     @Column(name="payment_method", nullable = false)
     private PaymentOption paymentMethod;
 
-//    private Set<OrderItemDTO> orderItems;
-
-    private UUID billingAddressId;
-//    private AddressDTO billingAddress;
-
-    private UUID customerId;
-//    private CustomerDTO customer;
-
-    private UUID shippingAddressId;
-//    private AddressDTO shippingAddress;
-
+    private Set<OrderItem> orderItems;
+    private AddressDTO billingAddress;
+    private AddressDTO shippingAddress;
     private OrderStatus status;
+    private Timestamp dateCreated;
+    private Timestamp lastUpdated;
 }

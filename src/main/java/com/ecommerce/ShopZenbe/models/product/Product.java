@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Data
 @Builder
@@ -29,7 +32,6 @@ public class Product {
     private String sku;
 
     @Column(name = "name", nullable = false)
-//    @JsonIgnore
     private String name;
 
     @Column(name = "description", nullable = false)
@@ -42,18 +44,18 @@ public class Product {
     private String image;
 
     @Column(name = "active", nullable = false)
-    private Boolean active = true;
+    private Boolean active;
 
     @Column(name = "units_in_stock", nullable = false)
     private Integer stock;
 
-    @Column(name = "date_created", nullable = false)
-//    @CreationTimestamp
-    private LocalDateTime dateCreated;
+    @Column(name = "date_created")
+    @CreationTimestamp
+    private Timestamp dateCreated;
 
     @Column(name = "last_updated")
-//    @UpdateTimestamp
-    private LocalDateTime lastUpdated;
+    @UpdateTimestamp
+    private Timestamp lastUpdated;
 
     @ManyToOne
     @JsonIgnore

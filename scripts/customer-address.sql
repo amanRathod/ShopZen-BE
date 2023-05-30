@@ -33,7 +33,9 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
    street varchar(255),
    zip_code varchar(255)
    full_name varchar(255),
-   mobile varchar(20),
+   phone varchar(20),
+   isBilling boolean,
+   isShipping boolean,
    customer_id UUID REFERENCES customer(id)
  );
 -- ======================================

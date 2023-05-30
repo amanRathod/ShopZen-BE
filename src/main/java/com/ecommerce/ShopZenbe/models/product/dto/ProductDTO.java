@@ -39,7 +39,7 @@ public class ProductDTO {
     private String image;
 
     @NotNull(message = "Active status is required")
-    private Boolean active = true;
+    private Boolean active;
 
     @NotNull(message = "Units in stock is required")
     @Min(value = 0, message = "Units in stock must be greater than or equal to 0")

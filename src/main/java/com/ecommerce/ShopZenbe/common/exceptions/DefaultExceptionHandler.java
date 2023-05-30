@@ -31,7 +31,7 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(RequestValidationException.class)
-    public ResponseEntity<ApiError> handleException(DuplicateResourceException e,
+    public ResponseEntity<ApiError> handleException(RequestValidationException e,
                                                     HttpServletRequest request) {
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
@@ -97,8 +97,8 @@ public class DefaultExceptionHandler {
         System.out.println("Error message: " + e.getMessage());
         ApiError apiError = new ApiError(
                 request.getRequestURI(),
-                "Internal Server Error",
-                "Please contact the administrator!",
+                e.getMessage(),
+                e.getCause().getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 LocalDateTime.now()
         );
