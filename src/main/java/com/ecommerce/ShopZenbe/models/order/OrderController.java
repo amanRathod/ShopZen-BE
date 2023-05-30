@@ -1,6 +1,8 @@
 package com.ecommerce.ShopZenbe.models.order;
 
 import com.ecommerce.ShopZenbe.common.utils.ApiResponse;
+import com.ecommerce.ShopZenbe.models.order.dto.OrderDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +33,8 @@ public class OrderController {
     @GetMapping("{orderId}")
     @PreAuthorize("hasAuthority('CUSTOMER') OR hasAuthority('ADMIN')")
     public ResponseEntity<?> getOrder(@PathVariable UUID orderId) {
-        Order order = orderService.getOrder(orderId);
-        ApiResponse<Order> response = new ApiResponse<>(HttpStatus.OK.value() , "success", order, "order");
+        OrderDTO order = orderService.getOrder(orderId);
+        ApiResponse<OrderDTO> response = new ApiResponse<>(HttpStatus.OK.value() , "success", order, "order");
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

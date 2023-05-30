@@ -3,6 +3,9 @@ package com.ecommerce.ShopZenbe.models.order;
 import com.ecommerce.ShopZenbe.common.exceptions.ResourceNotFoundException;
 import com.ecommerce.ShopZenbe.models.customer.Customer;
 import com.ecommerce.ShopZenbe.models.customer.CustomerRepository;
+import com.ecommerce.ShopZenbe.models.order.dto.OrderDTO;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,9 +20,12 @@ public class OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    public Order getOrder(UUID orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+    public OrderDTO getOrder(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        return modelMapper.map(order, OrderDTO.class);
     }
 
     public Set<Order> getAllOrders() {

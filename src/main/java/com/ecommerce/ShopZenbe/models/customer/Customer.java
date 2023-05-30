@@ -37,6 +37,9 @@ public class Customer implements UserDetails {
     @Column(name = "email")
     private String email;
 
+    @Column(name="image")
+    private String image;
+
     private String password;
 
     @Enumerated(EnumType.STRING)
