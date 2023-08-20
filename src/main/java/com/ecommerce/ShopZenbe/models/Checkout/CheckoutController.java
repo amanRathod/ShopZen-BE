@@ -22,8 +22,9 @@ public class CheckoutController {
     private CheckoutService checkoutService;
 
     @PostMapping("/purchase")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER') OR hasAuthority('ADMIN')")
     public ResponseEntity<?> placeOrder(@RequestBody Purchase purchase) {
+        System.out.println(purchase);
          PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
          ApiResponse<PurchaseResponse> response = new ApiResponse<>(HttpStatus.CREATED.value(), "Order placed successfully!", purchaseResponse, "orderTrackingNumber");
          return ResponseEntity.status(HttpStatus.CREATED).body(response);

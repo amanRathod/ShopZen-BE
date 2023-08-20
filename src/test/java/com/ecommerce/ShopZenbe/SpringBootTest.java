@@ -24,5 +24,6 @@ public class SpringBootTest {
 
         String plaintext = "123";
         System.out.println("Encrypted key : " + encryptor.encrypt(plaintext));
+        System.out.println(plaintext.equals(encryptor.decrypt(encryptor.encrypt(plaintext))));
     }
 }
