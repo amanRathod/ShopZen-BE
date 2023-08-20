@@ -23,8 +23,6 @@ public class ProductController {
     public ResponseEntity<ApiResponse<List<ProductDTO>>> getAllProducts() {
         List<ProductDTO> products = productService.getAllProducts();
 
-        System.out.println('all product=============', products);
-
         ApiResponse<List<ProductDTO>> response = new ApiResponse<>(HttpStatus.OK.value(), "", products,"products");
         return ResponseEntity.ok(response);
     }
